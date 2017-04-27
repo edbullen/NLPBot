@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Python NLP for ChatBots</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+	  @import url(https://fonts.googleapis.com/css?family=Raleway);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Raleway'}
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: lighter;
+		font-size: x-large;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+	
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+
+# Building a ChatBot with Python, NLTK and scikit-learn #  
+<br> <br><br><br><br><br><br><br><br><br><br><br><br>
+  
+London PyData 2017  - Ed Bullen, Oracle UK  
+<br>
+https://www.linkedin.com/in/edbullen/ <br>
+Twitter: @bullened
+ 
+---
+
+## About Me ##
+<img style="float: right;" src="oracle.png">
+
+#### Work ####
+
++ Senior Consultant at Oracle (5 years)   
+  - Focus on tech solutions for large finance orgs
+
+
+#### Data Science   <img style="float: right;" src="coursera.jpg"> 
+
++ Studing the Coursera Data Science Specialisation for last 2 years
+  - Completed 10 x 4 week modules, started the final Capstone this week
+  - Participate in the London Meetup and Hackathon community
+
+  
+  
+#### Home Life ####
++ Married with two children  <img style="float: right;" src="fencers_sml.jpg">
+  - both children learning Python!
++ Keen Fencer (once competed for GB)
+
+ 
+
+---
+  
+## Why ChatBots? ##
+
+<center><img src="chatbot_hype.jpg" width="600"  /></center>
+
+---
+
+## Tutorial Overview ##
+
+#### Demo Code #####
++ "SimpleBot" - starting point: learn basic conversations by example
++ Limitations as a background for NLP and ML motivation
+
+#### Python Notebooks ####
+1. Introduction to NLTK - Explore a Corpus and Treebank
+2. Tokenising Text and Parts-Of-Speech, 
+3. Grammer Structure and Dependency Trees
+4. Classification of Sentences using Machine Learning
+
+#### Demo Code ####
++ "NLBBot" - introduce the concepts and capabilities listed above
+
+### Setting Expectations ###
+"Broad not deep" - basic concepts and tools only
+
+---
+
+## Anatomy of a Chatbot ##
+
+<center><img src="anatomy_of_chatbot.png" width="800"  /></center>
+
+---
+
+exclude: true
+## Chatbot Capabilities ##
+
+<center><img src="chatbot_components.png" width="800"  /></center>
+
+---
+
+## "SimpleBot" - A Basic Framework ##
+
+<center><img src="simplebot_architecture.png" width="800"  /></center>
+
+https://github.com/edbullen/SimpleBot
+---
+
+## "SimpleBot" Limitations and Missing Logic ##
+
+#### Word and Grammer Classification ####
+Sense of Word is not considered in the flow:
++ What is the general topic?
++ We want to focus on the Subject and Object
++ For Example:
+    - *Where is the cat going to?*
+	- *Where is the dog going to?*
+
+#### Sentence Classification ####
+The class of sentence affects flow - for instance:
++ Questions need answers (not another question)
++ Chat is just chat
++ Statements need to be filed away and noted (and the flow stops there)
++ Perhaps we need to recognise when we are getting feedback about previous sentence
+
+---
+
+## "NLPBot" - Enhanced Chatbot Framework ##
+
+<center><img src="chatbot_architecture.png" width="800"  /></center>
+
+---
+
+## Natural Language Processing (NLP) ##
+
+### Excerpts from Wikipedia ###
+
++ Interactions between computers and human (natural) languages
+
++ Fruitfully process large natural language corpora
+   - Large samples of "real world" text, usually classified
+
++ Natural language understanding, natural language generation
+
++ Managing human-computer dialog systems
+
+---
+## Introducing the Python Natural Language Toolkit ##
+(...and a few others)
+
++ **Python NLTK** - http://www.nltk.org/
+  - Open Source package for Natural Language Processing
+  - Written in Python
+  - Originated at University of Pennsylvania (Steven Bird and Edward Loper)  
+  
++ **spaCy** - https://spacy.io
+  - High performance Cython library for NLP  
+  
++ **Stanford CoreNLP** - https://stanfordnlp.github.io/CoreNLP/
+  - Written in Java with good interface to NLTK  
+  
+---
+
+
+
+## Machine Learning ##
+
+### Sentence Classification ###
+
+Identifying **Dialogue Act Types**, for example: Question / Statement / Chat ?
+
+<center><img style="float: center;" src="supervised-classification.png" width="600" /></center>
+
+http://www.nltk.org/book/ch06.html
+
+---
+
+## Putting it all Together ##
+
+<center><img style="float: center;" src="Flow.jpg" width="800" /></center>
+
+
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+	  var slideshow = remark.create({ratio: "16:9"});
+    </script>
+  </body>
+</html>
