@@ -54,6 +54,15 @@ if response:
     except Exception as e:
         print("\n** ERROR **", e)
         
+    print("\nCreating statements table:")
+    try:
+        try_drop(cursor, "statements")
+        SQL = 'CREATE TABLE statements (sentence_id ' + charTypeShort + ' UNIQUE, word_id ' + charTypeShort + ' , class ' + charTypeShort + ')'    
+        print(SQL)
+        cursor.execute(SQL)
+    except Exception as e:
+        print("\n** ERROR **", e)
+        
     print("\nCreating associations table:")
     try:
         try_drop(cursor, "associations")
