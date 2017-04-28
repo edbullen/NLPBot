@@ -1,5 +1,5 @@
 ##############################################
-# pass in a sentance, pass out it's features #
+# pass in a sentence, pass out it's features #
 ##############################################
 
 import nltk
@@ -8,6 +8,8 @@ from nltk import word_tokenize
 lemma = nltk.wordnet.WordNetLemmatizer()
 sno = nltk.stem.SnowballStemmer('english')
 from nltk.corpus import stopwords
+
+import pandas as pd  # Use Pandas to create pandas Series in features_series()  
 
 import csv
 import sys
@@ -71,6 +73,30 @@ startTuples = ['NNS-DT',
 endTuples = ['IN-NN',
              'VB-VBN',
              'VBZ-NNP'] 
+
+# Because python dict's return key-vals in random order, provide ordered list to pass to ML models
+feature_keys = ["id",
+"wordCount",
+"stemmedCount",
+"stemmedEndNN",
+"CD",
+"NN",
+"NNP",
+"NNPS",
+"NNS",
+"PRP",
+"VBG",
+"VBZ",
+"startTuple0",
+"endTuple0",
+"endTuple1",
+"endTuple2",
+"verbBeforeNoun",
+"qMark",
+"qVerbCombo",
+"qTripleScore",
+"sTripleScore",
+"class"]
 
 
 def strip_sentence(sentence):
@@ -371,7 +397,17 @@ def features_dict(id,sentence,c="X"):
     features["class"] = c  #Class Type on end
     
     return features
-    
+
+# pass in dict, get back series 
+def features_series(features_dict):
+    values=[]
+    for key in feature_keys:
+        values.append(features_dict[key])
+
+    features_series = pd.Series(values)
+
+    return features_series
+       
  
 ## MAIN ##  
 if __name__ == '__main__':
