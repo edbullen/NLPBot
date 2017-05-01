@@ -1,6 +1,7 @@
 import sys
 import configparser
 import os
+import datetime
 
 import pwdutil   #local util for database password
 import pymysql   # http://pymysql.readthedocs.io/en/latest/
@@ -115,5 +116,9 @@ def db_connectionID(cursor):
     cursor.execute('SELECT connection_id()', (None))
     value = cursor.fetchone()["connection_id()"]
     return(value)
+
+def timestamp_string():
+    timestamp_string = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    return(timestamp_string)
         
         

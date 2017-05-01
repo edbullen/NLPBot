@@ -2,15 +2,27 @@ import socket
 import threading
 import os
 from string import punctuation
+import random
+import re
+import logging
 
 import chatbot
 import utils
-import random
-import re
 
+LOGFILE = './log/botserver.log'
 conf = utils.get_config()
 toBool = lambda str: True if str == "True" else False 
-DEBUG_SERVER = toBool(conf["DEBUG"]["server"]) 
+
+DEBUG_SERVER = toBool(conf["DEBUG"]["server"])
+#LOGGING_FMT = '%(asctime)s %(threadName)s %(message)s, datefmt="%Y-%m-%d_%H:%M:%S"'
+LOGGING_FMT = '%(asctime)s %(threadName)s %(message)s'
+
+regexpYes = re.compile(r'yes')
+
+if DEBUG_SERVER:
+    logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format=LOGGING_FMT)
+else:
+    logging.basicConfig(filename=LOGFILE, level=logging.INFO, format=LOGGING_FMT) 
 
 def session(connection):
     i = 0   # counter for how many times we have been round the loop
@@ -23,13 +35,13 @@ def session(connection):
     DBUSER = conf["MySQL"]["dbuser"]
     DBNAME = conf["MySQL"]["dbname"]
     
-    print("Starting Bot...") 
+    logging.info("Starting Bot session-thread...") 
     # initialize the connection to the database
-    print("Connecting to database...")
+    logging.info("   session-thread connecting to database...")
     DBconnection = utils.db_connection(DBHOST, DBUSER, DBNAME)
     DBcursor =  DBconnection.cursor()
     DBconnectionID = utils.db_connectionID(DBcursor)
-    print("...connected")
+    logging.info("   ...connected")
     
     botSentence = 'Hello!'
     weight = 0
@@ -41,13 +53,13 @@ def session(connection):
     
     def receive(connection):
         
-        if DEBUG_SERVER: print("PID {}, thread {} \n".format(pid, thread))
+        logging.debug("PID {}, thread {} \n".format(pid, thread))
         received = connection.recv(1024)
         if not received:
-            print("Closing connection {}".format(thread))
+            #logging.info("Closing connection {}".format(thread))
             return False
         else:
-            if DEBUG_SERVER: print("Received {}, echoing".format(received))
+            #logging.debug("    Received {}, echoing".format(received))
             return received
    
     while True:
@@ -63,13 +75,16 @@ def session(connection):
 
         # Chatbot processing
         botSentence, weight, trainMe, checkStore = chatbot.chat_flow(DBcursor, humanSentence, weight)
+        logging.debug("   Received botSentence {} from chatbot.chat_flow".format(botSentence))
         
         if trainMe:
+            logging.debug("   trainMe is True")
             send = "Bot> Please train me - enter a response for me to learn (or \"skip\" to skip)' ".encode()
             connection.send(send)
             previousSentence = humanSentence
             received = receive(connection)
             humanSentence = received.decode().strip()
+            logging.debug("   trainMe received {}".format(humanSentence))
                         
             if humanSentence != "skip":
                 chatbot.train_me(previousSentence, humanSentence, DBcursor)
@@ -81,33 +96,39 @@ def session(connection):
                 trainMe = False
                 
         if checkStore:
+            logging.debug("CheckStore is True")
             send = 'Bot> Shall I store that as a fact for future reference?  ("yes" to store)'.encode()
             connection.send(send)
             previousSentence = humanSentence
             received = receive(connection)
             humanSentence = received.decode().strip()
+            logging.debug("   checkStore received {}".format(humanSentence))
             
-            if chatbot.regexpYes.search(humanSentence.lower()):
+            if regexpYes.search(humanSentence.lower()):
                 #Store previous Sentence
-                chatbot.store_statement(previousSentence, cursor)
+                logging.debug("   Storing...")
+                chatbot.store_statement(previousSentence, DBcursor)
+                logging.debug("   Statement Stored.")
                 botSentence = random.choice(chatbot.STATEMENT_STORED)
-
             else:
                 botSentence = "Bot> OK, moving on..."
                 checkStore = False
 
         DBconnection.commit()
+        logging.debug("   sending botSentence back: {}".format(botSentence))
         send = botSentence.encode()
                 
         if i == 0:
             send = startMessage.encode() + send
-        
         connection.send(send)
-        
         i = i + 1
+    logging.info("   Closing Session")
 
 if __name__ == "__main__":
+    logging.info("-----------------------------")
+    logging.info("--  Starting BotServer     --")
     print("Starting...")
+    print("Logging to ", LOGFILE)
     
     LISTEN_HOST = conf["Server"]["listen_host"]
     LISTEN_PORT = int(conf["Server"]["tcp_socket"])
@@ -119,18 +140,19 @@ if __name__ == "__main__":
     sckt.bind((LISTEN_HOST, LISTEN_PORT))
     sckt.listen(LISTEN_QUEUE)
     print("...socket set up")
+    logging.info("Server Listener set up on port " + str(LISTEN_PORT))
     
     # Accept connections in a loop
     while True:
-        print("Waiting for a connection")
+        logging.info("Main Server Waiting for a connection")
         (connection, address) = sckt.accept()
-        print("Connect Received")
+        logging.info("Connect Received " + str(connection) + " " + str(address))
         
         #threading.Thread(target = session, args=[connection]).start()
         t = threading.Thread(target = session, args=[connection])
         t.setDaemon(True)  #set to Daemon status, allows CTRL-C to kill all threads
         t.start()
     
-    print("closing")
+    logging.info("Closing Server Listen socket on " + str(LISTEN_PORT))
     sckt.close()
        
