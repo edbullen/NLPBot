@@ -33,6 +33,7 @@ def session(connection):
     weight = 0
     
     trainMe = False
+    checkStore = False
     botSentence = 'Hello!'
     startMessage = startMessage + ("...started\n")
     
@@ -46,24 +47,20 @@ def session(connection):
         else:
             if DEBUG_SERVER: print("Received {}, echoing".format(received))
             return received
-        
-        
-    
+   
     while True:
         pid = os.getpid()
         thread = threading.current_thread()
-        
         
         # pass received message to chatbot
         received = receive(connection)
         humanSentence = received.decode().strip()
         
-        
         if humanSentence == '' or humanSentence.strip(punctuation).lower() == 'quit' or humanSentence.strip(punctuation).lower() == 'exit':
             break
 
         # Chatbot processing
-        botSentence, weight, trainMe = chatbot.chat_flow(DBcursor, humanSentence, weight)
+        botSentence, weight, trainMe, checkStore = chatbot.chat_flow(DBcursor, humanSentence, weight)
         
         if trainMe:
             send = "Bot> Please train me - enter a response for me to learn (or \"skip\" to skip)' ".encode()
@@ -80,6 +77,22 @@ def session(connection):
                 botSentence = "Bot> OK, moving on..."
                 #connection.send(send)
                 trainMe = False
+                
+        if checkStore:
+            send = 'Bot> Shall I store that as a fact for future reference?  ("yes" to store)'
+            connection.send(send)
+            previousSentence = humanSentence
+            received = receive(connection)
+            humanSentence = received.decode().strip()
+            
+            if regexpYes.search(humanSentence.lower()):
+                #Store previous Sentence
+                store_statement(previousSentence, cursor)
+                botSentence = random.choice(STATEMENT_STORED)
+
+            else:
+                botSentence = "Bot> OK, moving on..."
+                checkStore = False
 
         DBconnection.commit()
         send = botSentence.encode()
