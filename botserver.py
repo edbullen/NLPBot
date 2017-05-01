@@ -5,6 +5,8 @@ from string import punctuation
 
 import chatbot
 import utils
+import random
+import re
 
 conf = utils.get_config()
 toBool = lambda str: True if str == "True" else False 
@@ -79,16 +81,16 @@ def session(connection):
                 trainMe = False
                 
         if checkStore:
-            send = 'Bot> Shall I store that as a fact for future reference?  ("yes" to store)'
+            send = 'Bot> Shall I store that as a fact for future reference?  ("yes" to store)'.encode()
             connection.send(send)
             previousSentence = humanSentence
             received = receive(connection)
             humanSentence = received.decode().strip()
             
-            if regexpYes.search(humanSentence.lower()):
+            if chatbot.regexpYes.search(humanSentence.lower()):
                 #Store previous Sentence
-                store_statement(previousSentence, cursor)
-                botSentence = random.choice(STATEMENT_STORED)
+                chatbot.store_statement(previousSentence, cursor)
+                botSentence = random.choice(chatbot.STATEMENT_STORED)
 
             else:
                 botSentence = "Bot> OK, moving on..."
