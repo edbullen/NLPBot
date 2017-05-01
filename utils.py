@@ -85,6 +85,15 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' "
                              "(or 'y' or 'n').\n")
             
+#  Flatten out a list of lists (taken from SO: http://stackoverflow.com/questions/10823877/what-is-the-fastest-way-to-flatten-arbitrarily-nested-lists-in-python 
+def flatten(container):
+    for i in container:
+        if isinstance(i, (list,tuple)):
+            for j in flatten(i):
+                yield j
+        else:
+            yield i  
+                      
 def db_connection(host, user, dbname, charset = "utf8mb4"):
     """
     Connect to a MySQL Database Server

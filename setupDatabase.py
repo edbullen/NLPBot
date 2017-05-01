@@ -18,6 +18,7 @@ def try_drop(cursor,table_name):
     cursor.execute(SQL)
 
 print("Configuring Tables for database configuration: \n \tServer: {0} \n \tDB-User: {1} \n \tDB-Name: {2}".format(DBHOST,DBUSER, DBNAME))
+print("\n** ALL EXISTING TABLES AND DATA WILL BE LOST **\n")
 
 response = utils.query_yes_no("Continue?")
 
@@ -57,11 +58,23 @@ if response:
     print("\nCreating statements table:")
     try:
         try_drop(cursor, "statements")
-        SQL = 'CREATE TABLE statements (sentence_id ' + charTypeShort + ' UNIQUE, word_id ' + charTypeShort + ' , class ' + charTypeShort + ')'    
+        SQL = 'CREATE TABLE statements (sentence_id ' + charTypeShort + ', word_id ' + charTypeShort + ' , class ' + charTypeShort + ')'    
         print(SQL)
         cursor.execute(SQL)
     except Exception as e:
         print("\n** ERROR **", e)
+        
+    print("\nAdding statements table INDEXES:")
+    try:
+        indexes = ['ALTER TABLE statements add INDEX statements_sentenceid_idx (sentence_id)',
+                   'ALTER TABLE statements add INDEX statements_wordid_idx (word_id)']
+        for index in indexes:
+            SQL = index
+            print(SQL)
+            cursor.execute(SQL)
+    except Exception as e:
+        print("\n** ERROR **", e)
+
         
     print("\nCreating associations table:")
     try:
@@ -69,6 +82,17 @@ if response:
         SQL = 'CREATE TABLE associations (word_id ' + charTypeShort + ' NOT NULL, sentence_id ' + charTypeShort + ' NOT NULL, weight REAL NOT NULL)'
         print(SQL)
         cursor.execute(SQL)
+    except Exception as e:
+        print("\n** ERROR **", e)
+    
+    print("\nAdding associations table INDEXES:")
+    try:
+        indexes = ['ALTER TABLE associations add INDEX associations_wordid_idx (word_id)',
+                   'ALTER TABLE associations add INDEX associations_sentenceid_idx (sentence_id)']
+        for index in indexes:
+            SQL = index
+            print(SQL)
+            cursor.execute(SQL)
     except Exception as e:
         print("\n** ERROR **", e)
         
