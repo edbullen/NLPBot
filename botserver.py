@@ -14,7 +14,6 @@ conf = utils.get_config()
 toBool = lambda str: True if str == "True" else False 
 
 DEBUG_SERVER = toBool(conf["DEBUG"]["server"])
-#LOGGING_FMT = '%(asctime)s %(threadName)s %(message)s, datefmt="%Y-%m-%d_%H:%M:%S"'
 LOGGING_FMT = '%(asctime)s %(threadName)s %(message)s'
 
 regexpYes = re.compile(r'yes')
@@ -22,20 +21,20 @@ regexpYes = re.compile(r'yes')
 if DEBUG_SERVER:
     logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format=LOGGING_FMT)
 else:
-    logging.basicConfig(filename=LOGFILE, level=logging.INFO, format=LOGGING_FMT) 
+    logging.basicConfig(filename=LOGFILE, level=logging.INFO, format=LOGGING_FMT)
 
 def session(connection):
     i = 0   # counter for how many times we have been round the loop
-    startMessage = "Starting Bot...\n"
+#    startMessage = "Starting Bot...\n"
     
-    # initialize the connection to the database
+    # Get Config
     conf = utils.get_config()
-    
     DBHOST = conf["MySQL"]["server"] 
     DBUSER = conf["MySQL"]["dbuser"]
     DBNAME = conf["MySQL"]["dbname"]
     
     logging.info("Starting Bot session-thread...") 
+
     # initialize the connection to the database
     logging.info("   session-thread connecting to database...")
     DBconnection = utils.db_connection(DBHOST, DBUSER, DBNAME)
@@ -48,12 +47,11 @@ def session(connection):
     
     trainMe = False
     checkStore = False
-    botSentence = 'Hello!'
-    startMessage = startMessage + ("...started\n")
+#    startMessage = startMessage + ("...started\n")
     
     def receive(connection):
         
-        logging.debug("PID {}, thread {} \n".format(pid, thread))
+        logging.debug("   receive(connection): PID {}, thread {} \n".format(pid, thread))
         received = connection.recv(1024)
         if not received:
             #logging.info("Closing connection {}".format(thread))
@@ -118,10 +116,10 @@ def session(connection):
         logging.debug("   sending botSentence back: {}".format(botSentence))
         send = botSentence.encode()
                 
-        if i == 0:
-            send = startMessage.encode() + send
+#        if i == 0:
+#            send = startMessage.encode() + send
         connection.send(send)
-        i = i + 1
+#        i = i + 1
     logging.info("   Closing Session")
 
 if __name__ == "__main__":
