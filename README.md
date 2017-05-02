@@ -11,17 +11,17 @@ This version is still at a basic experimentation level - there is no concept of 
 
 ## Python Library Dependencies ##
 
-[pymysql](http://pymysql.readthedocs.io/en/latest/)  
-[nltk](http://www.nltk.org/install.html)
-[numpy](http://www.numpy.org/)
-[pandas](http://pandas.pydata.org/)
-[scipy](https://www.scipy.org/)
-[scikit-learn](http://scikit-learn.org/stable/)
++ [pymysql](http://pymysql.readthedocs.io/en/latest/)  
++ [nltk](http://www.nltk.org/install.html)
++ [numpy](http://www.numpy.org/)
++ [pandas](http://pandas.pydata.org/)
++ [scipy](https://www.scipy.org/)
++ [scikit-learn](http://scikit-learn.org/stable/)
 
 
-[Stanford CoreNLP Parser](https://stanfordnlp.github.io/CoreNLP/) This is a Java package that needs to be download and located in suitable dir for future ref
++ [Stanford CoreNLP Parser](https://stanfordnlp.github.io/CoreNLP/) This is a Java package that needs to be download and located in suitable dir for future ref
 
-[Java](https://java.com/en/download/help/linux_x64rpm_install.xml) - tested with Java 8, java version "1.8.0_131"
++ [Java](https://java.com/en/download/help/linux_x64rpm_install.xml) - tested with Java 8, java version "1.8.0_131"
  
   
 
@@ -151,30 +151,28 @@ $ python simpleclient.py -a 192.168.10.1 -p 1234
 Connecting to server 192.168.10.1  at port  1234
 >>> Hi
 Bot> hello
->>> The latest Python source distribution is always available from python.org at                           https://www.python.org/downloads/
+>>> The latest Python source distribution is always available from python.org at https://www.python.org/downloads/
 Bot> Shall I store that as a fact for future reference?  ("yes" to store)
 >>> yes
 Thanks, I've made a note of that.
 >>> There is a Python newsgroup comp.lang.python and a mailing list: python-list                          .
 Bot> Shall I store that as a fact for future reference?  ("yes" to store)
 >>> yes
-OK, I've stored that information.
+Bot> OK, I've stored that information.
 >>> Where can I get the latest Python source code from?
-Sorry, I can't find an answer to that.
+Bot> Sorry, I can't find an answer to that.
 >>> Where is the latest Python source distribution?
-
-The latest Python source distribution is always available from python.org at htt                          ps://www.python.org/downloads/
+Bot> The latest Python source distribution is always available from python.org at https://www.python.org/downloads/
 >>> Thanks.
-How are you?
+Bot> How are you?
 >>> I am fine thanks
-How are you?
+Bot> How are you?
 >>> Good
 Bot> Please train me - enter a response for me to learn (or "skip" to skip)'
 >>> skip
 Bot> OK, moving on...
 >>> Is there a Python newsgroup or mailing list?
-
-There is a Python newsgroup comp.lang.python and a mailing list: python-list.
+Bot> There is a Python newsgroup comp.lang.python and a mailing list: python-list.
 >>> quit
 Connection closed
 ```

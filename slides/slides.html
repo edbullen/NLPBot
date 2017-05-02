@@ -30,8 +30,10 @@ class: center, middle
   
 London PyData 2017  - Ed Bullen, Oracle UK  
 <br>
-https://www.linkedin.com/in/edbullen/ <br>
-Twitter: @bullened
+<table>
+<tr> <td align="left"> <img style="float: left;" src="linkedin.png" width="25"> &nbsp https://www.linkedin.com/in/edbullen/</td>  </tr>
+<tr> <td align="left"> <img style="float: left;" src="twitter_sml.png" width="25"> &nbsp @bullened  </td> </tr>
+</table>
  
 ---
 
@@ -80,7 +82,7 @@ Twitter: @bullened
 4. Classification of Sentences using Machine Learning
 
 #### Demo Code ####
-+ "NLBBot" - introduce the concepts and capabilities listed above
++ "NLPBot" - introduce the concepts and capabilities listed above
 
 ### Setting Expectations ###
 "Broad not deep" - basic concepts and tools only
@@ -107,15 +109,36 @@ exclude: true
 https://github.com/edbullen/SimpleBot
 ---
 
+
+
+## "NLPBot" - Enhanced Chatbot Framework ##
+
+<center><img src="chatbot_architecture.png" width="800"  /></center>
+
+---
+
+## Part 1 - Trivial Example ##
+
+###SimpleBot Demo###
+
+** https://github.com/edbullen/SimpleBot ** - based on this blog-post: http://rodic.fr/blog/python-chatbot-1/
+
+<center><img src="DB_schema_simple.png" width="500"  /></center>
+
+---
+
 ## "SimpleBot" Limitations and Missing Logic ##
 
 #### Word and Grammer Classification ####
-Sense of Word is not considered in the flow:
+Meaning and type of the word is not considered in the flow:
 + What is the general topic?
 + We want to focus on the Subject and Object
 + For Example:
     - *Where is the cat going to?*
-	- *Where is the dog going to?*
+	- *Where is the car going to?*   
+Or:
+    - *The cat is dead*
+	- *Is the cat dead*
 
 #### Sentence Classification ####
 The class of sentence affects flow - for instance:
@@ -123,12 +146,6 @@ The class of sentence affects flow - for instance:
 + Chat is just chat
 + Statements need to be filed away and noted (and the flow stops there)
 + Perhaps we need to recognise when we are getting feedback about previous sentence
-
----
-
-## "NLPBot" - Enhanced Chatbot Framework ##
-
-<center><img src="chatbot_architecture.png" width="800"  /></center>
 
 ---
 
@@ -162,9 +179,28 @@ The class of sentence affects flow - for instance:
   
 ---
 
+## Part 2 - Natural Language Processing Notebooks ##
+
+#### GitHub Repo ####
+https://github.com/edbullen/nltk
+
+#### NoteBooks #####
+1. introduction to NLTK - Explore a Corpus and Treebank
+```
+corpora.ipynb
+```
+2. Tokenising Text and Parts-Of-Speech
+```
+tokenisation.ipynb
+```
+3. Grammer Structure and Dependency Trees
+```
+grammar.ipynb
+```
 
 
-## Machine Learning ##
+---
+## Part 3 - Machine Learning and Classification ##
 
 ### Sentence Classification ###
 
@@ -172,16 +208,66 @@ Identifying **Dialogue Act Types**, for example: Question / Statement / Chat ?
 
 <center><img style="float: center;" src="supervised-classification.png" width="600" /></center>
 
-http://www.nltk.org/book/ch06.html
+http://www.nltk.org/book/ch06.html  - i.e. example with `nltk.corpus.nps_chat.xml_posts()`
+
+---
+## Part 3 - Machine Learning and Classification ##
+
+#### NoteBooks in GitHub Repo ####
+https://github.com/edbullen/nltk
+
+```
+classification.ipynb
+```
 
 ---
 
-## Putting it all Together ##
+## Part 4 - Putting it all Together ##
 
 <center><img style="float: center;" src="Flow.jpg" width="800" /></center>
 
+---
+## Part 4 - Putting it all Together ##
+
+#### NLPBot ####
+
+https://github.com/edbullen/NLPBot
+
+```
+>>> The latest Python source distribution is always available from python.org at https://www.python.org/downloads/
+Bot> Shall I store that as a fact for future reference?  ("yes" to store)
+>>> yes
+Bot> Thanks, I've made a note of that.
+>>> There is a Python newsgroup comp.lang.python and a mailing list: python-list                          .
+Bot> Shall I store that as a fact for future reference?  ("yes" to store)
+>>> yes
+OK, I've stored that information.
+>>> Where can I get the latest Python source code from?
+Sorry, I can't find an answer to that.
+>>> Where is the latest Python source distribution?
+The latest Python source distribution is always available from python.org at https://www.python.org/downloads/
+>>> Thanks.
+Bot> How are you?
+>>> I am fine thanks
+Bot> How are you?
+>>> Good
+Bot> Please train me - enter a response for me to learn (or "skip" to skip)'
+>>> skip
+Bot> OK, moving on...
+>>> Is there a Python newsgroup or mailing list?
+Bot> There is a Python newsgroup comp.lang.python and a mailing list: python-list.
+```
 
 
+
+---
+class: center, middle
+# Thank You #
+<br> <br><br><br><br><br><br><br><br>
+<table>
+<tr> <td align="left"> <img style="float: left;" src="linkedin.png" width="25"> &nbsp https://www.linkedin.com/in/edbullen/</td>  </tr>
+<tr> <td align="left"> <img style="float: left;" src="twitter_sml.png" width="25"> &nbsp @bullened  </td> </tr>
+</table>
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
