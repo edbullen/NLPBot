@@ -10,14 +10,13 @@ As it currently stands (May 2017), the functionality is far from perfect, but it
 This version is still at a basic experimentation level - there is no concept of authentication, security etc.
 
 ## Python Library Dependencies ##
-
+  
 + [pymysql](http://pymysql.readthedocs.io/en/latest/)  
-+ [nltk](http://www.nltk.org/install.html)
++ [nltk](http://www.nltk.org/install.html) 
 + [numpy](http://www.numpy.org/)
 + [pandas](http://pandas.pydata.org/)
 + [scipy](https://www.scipy.org/)
 + [scikit-learn](http://scikit-learn.org/stable/)
-
 
 + [Stanford CoreNLP Parser](https://stanfordnlp.github.io/CoreNLP/) This is a Java package that needs to be download and located in suitable dir for future ref
 
