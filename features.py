@@ -19,7 +19,6 @@ import string
 import itertools
 
 line = ["xxx","Oracle 12.2 will be released for on-premises users on 15 March 2017",0,"S"]
-#line = ["xxx","Hows it going?",0,"Q"]
 
 pos = []           #list of PartsOfSpeech
 
@@ -123,7 +122,6 @@ def exists_pair_combos(comboCheckList, sentence):
     else:
         return 0
     
-
 # Parts Of Speech
 def get_pos(sentence):
     sentenceParsed = word_tokenize(sentence)
@@ -165,7 +163,6 @@ def exists_vb_before_nn(pos):
     if "MD" in pos_tags:
         mi = pos_tags.index("MD")
 
-    #print("DEBUG - VerbI, NounI", str(vi), str(ni))        
     if vi < ni or mi < ni :
         return(1)
     else:
@@ -214,13 +211,11 @@ def get_triples(pos):
     list_of_triple_strings = []
     pos = [ i[1] for i in pos ]  # extract the 2nd element of the POS tuples in list
     n = len(pos)
-    #print(n,pos)                                     #DEBUG
     
     if n > 2:  # need to have three items
         for i in range(0,n-2):
             t = "-".join(pos[i:i+3]) # pull out 3 list item from counter, convert to string
             list_of_triple_strings.append(t)
-    #print("returning",list_of_triple_strings)        # DEBUG
     return list_of_triple_strings 
         
 def get_first_last_tuples(sentence):
@@ -291,13 +286,9 @@ def get_string(id,sentence,c="X"):
     stemmed = stematize(sentence)
     wordCount = len(sentence.split())
     stemmedCount = len(stemmed)
-            
-    #output = id + ","  + str(wordCount) + "," + str(stemmedCount) + "," + str(qMark)
-    #header = header + "id,wordCount,stemmedCount,qMark"
     
     qVerbCombo = exists_pair_combos(VerbCombos,sentence)
          
-    #Insert Verb Before Noun Here
     verbBeforeNoun = exists_vb_before_nn(pos)
             
     output = id + ","  + str(wordCount) + "," + str(stemmedCount) + "," + str(qVerbCombo)+ "," + str(qMark) + "," + str(verbBeforeNoun)
@@ -310,7 +301,6 @@ def get_string(id,sentence,c="X"):
 
     output = output + "," + str(exists_stemmed_end_NN(stemmed))
     header = header + ",StemmedEndNN,"
-
             
     ## get Start Tuples and End Tuples Features ##
     startTuple,endTuple = get_first_last_tuples(sentence)
@@ -332,21 +322,11 @@ def get_string(id,sentence,c="X"):
     total = sum(l)
     output = output + "," + str(total)
     header = header + "qTripleScore" + ","
-    """
-    output = output + "," + ",".join(str(i) for i in l)
-    for i in range(0,len(l)):
-        header = header + "qTriple" + str(i+1) + ","
-    """
 
     l = exists_triples(triples, statementTriples)
     total = sum(l)
     output = output + "," + str(total)
     header = header + "sTripleScore" + ","
-    """
-    output = output + "," + ",".join(str(i) for i in l)
-    for i in range(0,len(l)):
-        header = header + "sTriple" + str(i+1) + ","
-    """
 
     output = output + "," + c  #Class Type on end
     header = header + "class"
@@ -408,7 +388,6 @@ def features_series(features_dict):
 
     return features_series
        
- 
 ## MAIN ##  
 if __name__ == '__main__':
 
