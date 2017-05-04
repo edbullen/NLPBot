@@ -159,6 +159,7 @@ A separate file called
 must be created in the config sub-directory with a single key phrase in it and no other text or characters - i.e.
 
 ```
+$ cd config
 $ echo "thisIsSecret" > ./.key
 $ chmod 400 .key
 ```
@@ -166,7 +167,8 @@ $ chmod 400 .key
 
 When the `.key` file is in place, initialise password access to the remote MySQL database using 
 ```
-python pwdutil.py -s TheBotDatabasePassword
+cd ~/NLPBot
+python3.5 pwdutil.py -s TheBotDatabasePassword
 ```
 
 where "password" is the appropriate real password for the ChatBot MySQL database user account (so this is not the key phrase set above).
@@ -174,15 +176,6 @@ where "password" is the appropriate real password for the ChatBot MySQL database
 NOTE - the approach taken here is not very secure.  It is better than storing the database password in clear text, but is still very limited and this configuration is not suitable for sensitive data.  
 
 
-```
-su - botuser  
-  
-cd NLPBot/config  
-echo "mySecret" > ./.key  
-chmod 400 .key  
-cd ..  
-python3.5 pwdutil.py -s TheBotDatabasePassword
-```   
 
 **Test Database Configuration**
 A simple `pingDB.py` script is provided to test database access and base functionality.
@@ -192,7 +185,7 @@ The script connects as the configured mySQL user, creates a table "bot_test_tab"
 Expected output is below:
 
 ```
-$ python ./pingDB.py
+$ python3.5 ./pingDB.py
 Warning: (1051, "Unknown table 'nlpbot.bot_test_tab'")
   self._do_get_result()
 execute drop_test_tab Args: None Response 0
@@ -227,8 +220,6 @@ Done.
 ```
 
 
-
-
 ## 10. Install the Stanford CoreNLP Package ####
 
 as `botuser`:
@@ -241,6 +232,13 @@ cd  StanfordParser
 wget http://nlp.stanford.edu/software/stanford-corenlp-full-2016-10-31.zip
 unzip *.zip
 ```  
+
+Optional Path Simplification:
+
+```
+cd /home/botuser/StanfordParser
+mv stanford-corenlp-full-2016-10-31 coreNLP
+```
 
 ## 11. Configure the botuser ./config/config.ini file ####
 
@@ -259,9 +257,62 @@ corejar: /home/botuser/StanfordParser/coreNLP/stanford-corenlp-3.7.0.jar
 modelsjar: /home/botuser/StanfordParser/coreNLP/stanford-corenlp-3.7.0-models.jar
 ```
 
+#### NLTK Data DownLoad ####
+
+As the **botuser** (not root):
+```
+$ python3.5
+Python 3.5.3 (default, May  3 2017, 12:47:34)
+[GCC 4.4.7 20120313 (Red Hat 4.4.7-17)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import nltk
+>>> nltk.download('punkt')
+[nltk_data] Downloading package punkt to /home/botuser/nltk_data...
+[nltk_data]   Unzipping tokenizers/punkt.zip.
+True
+
+>>> nltk.download('averaged_perceptron_tagger')
+[nltk_data] Downloading package averaged_perceptron_tagger to
+[nltk_data]     /home/botuser/nltk_data...
+[nltk_data]   Unzipping taggers/averaged_perceptron_tagger.zip.
+True
+
+>>> nltk.download("stopwords")
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /home/botuser/nltk_data...
+[nltk_data]   Unzipping corpora/stopwords.zip.
+```
+
+
 #### Validate Database Connectivity
 
 `python3.5 pingDB.py`
+
+
+#### Re-Build the SciKit-Learn ML Model ####
+
+Due to binary compatibility issues, usually the ML model must be re-built:
+
+```
+ python3.5 mlClassGenerateRfModel.py
+```
+
+By default this reads in training data from `./analysis/featuresDump.csv` and writes it out to `./RFmodel.ml`  
+**Sample Output **
+```
+reading input from  ./analysis/featuresDump.csv
+100 rows loaded
+FEATURES = Index(['wordCount', 'stemmedCount', 'stemmedEndNN', 'CD', 'NN', 'NNP', 'NNPS',
+       'NNS', 'PRP', 'VBG', 'VBZ', 'startTuple0', 'endTuple0', 'endTuple1',
+       'endTuple2', 'verbBeforeNoun', 'qMark', 'qVerbCombo', 'qTripleScore',
+       'sTripleScore'],
+      dtype='object')
+
+saving model to ./RFmodel.ml
+
+Complete.
+```
+
 
 ## 12. Start BotServer ##
 
@@ -292,3 +343,29 @@ botuser  23165 22854  0 08:54 pts/0    00:00:00 grep botserver
 Make sure the botserver port is allowed through the firewall.
 
 `python3.5 simpleclient.py -a 192.168.10.101 -p 9999`
+
+#### Debugging ####
+
+**SEt Logging**
+
+Set the **server** debug paramter to True in the `config.ini` file to increase the amount of logging information recorded by the botserver.py process.
+
+```
+[DEBUG]
+assoc: False
+weight: False
+itemid: False
+match: False
+server: True
+answer: False
+```
+Kill and restart the botserver process for the change to take effect.
+
+**Run in Single User Mode for Debugging**
+
+Extra diagnostics information and output from exceptions will be raised to <stdout> (terminal ) when run locally as follows:
+
+```
+python3.5 chatbot.py
+```
+
