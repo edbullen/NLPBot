@@ -77,7 +77,7 @@ def session(connection):
         
         if trainMe:
             logging.debug("   trainMe is True")
-            send = "Bot> Please train me - enter a response for me to learn (or \"skip\" to skip)' ".encode()
+            send = "Please train me - enter a response for me to learn (or \"skip\" to skip)' ".encode()
             connection.send(send)
             previousSentence = humanSentence
             received = receive(connection)
@@ -86,16 +86,16 @@ def session(connection):
                         
             if humanSentence != "skip":
                 chatbot.train_me(previousSentence, humanSentence, DBcursor)
-                botSentence = "Bot> Thanks I've noted that"
+                botSentence = "Thanks I've noted that"
                 #connection.send(send)
             else:
-                botSentence = "Bot> OK, moving on..."
+                botSentence = "OK, moving on..."
                 #connection.send(send)
                 trainMe = False
                 
         if checkStore:
             logging.debug("CheckStore is True")
-            send = 'Bot> Shall I store that as a fact for future reference?  ("yes" to store)'.encode()
+            send = 'Shall I store that as a fact for future reference?  ("yes" to store)'.encode()
             connection.send(send)
             previousSentence = humanSentence
             received = receive(connection)
@@ -109,7 +109,7 @@ def session(connection):
                 logging.debug("   Statement Stored.")
                 botSentence = random.choice(chatbot.STATEMENT_STORED)
             else:
-                botSentence = "Bot> OK, moving on..."
+                botSentence = "OK, moving on..."
                 checkStore = False
 
         DBconnection.commit()
