@@ -449,12 +449,16 @@ def chat_flow(cursor, humanSentence, weight):
         answers = get_answer(humanSentence, cursor)
         if len(answers) > 0:
             answer = ""
-            for a in answers:
-                answer = answer + "\n" + a[2]
+            weight = int(answers[0][1])  #2018-02-19
+            if weight > 1:               #2018-02-19
+                for a in answers:
+                     answer = answer + "\n" + a[2]
 
-            botSentence = answer
-            weight = answers[0:1]
-            ##sentence_id, weight, botSentence = answers[0]
+                botSentence = answer
+                #weight = answers[0:1] 2018-02-19
+                ##sentence_id, weight, botSentence = answers[0]
+            else:
+                botSentence = NO_ANSWER_DATA
         else:
             botSentence = NO_ANSWER_DATA
                         
@@ -506,7 +510,8 @@ if __name__ == "__main__":
         
         # Output bot's message
         if DEBUG_WEIGHT: 
-            print('Bot> ' + botSentence + ' DEBUG_WEIGHT:' + str(round(weight,5)) )
+            #print('Bot> ' + botSentence + ' DEBUG_WEIGHT:' + str(round(weight,5)) ) #2018-02-19
+            print('Bot> ' + botSentence + ' DEBUG_WEIGHT:' + str(round(weight,5) ) )
         else:
             print('Bot> ' + botSentence)
             
