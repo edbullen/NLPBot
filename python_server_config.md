@@ -18,10 +18,13 @@ cd Python-3.5.3
 ```
 #### Linux Dependencies
 
+Red Hat  / OEL    
 ```
 yum install openssl-devel
 yum install zlib-devel bzip2-devel sqlite sqlite-devel openssl-devel
 ```
+
+Ubuntu:  
 
 #### Configure and Compile as "ALTINSTALL" 
 ```
