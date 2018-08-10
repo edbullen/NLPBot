@@ -1,6 +1,7 @@
 import base64
 import argparse
 import pickle
+import getpass
 
 """ 
   Trivial Password Obsfucation Utility
@@ -52,18 +53,24 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Password Config Util', formatter_class=argparse.RawTextHelpFormatter)
     group = parser.add_mutually_exclusive_group()
     
-    group.add_argument('-s', '--set', dest = "password", help='Store encoded password')
+    group.add_argument('-s', '--set', dest = "password", help='Store encoded password', action='store_true')
     group.add_argument('-g', '--get', dest = "get", help='Get encoded password', action='store_true')
     args = vars(parser.parse_args())    
     
     key = get_key()
         
     if args["password"]:
-        print("Saving Encoded Password")
+        print("Saving Encoded Password:\nPlease enter the password (NOTE - characters will not be echoed to the screen)")
         # Encode Pwd
-        encoded = encode(key, args["password"])
-        #Store it
-        store_pwd(encoded)
+        password = getpass.getpass('Password:')
+        print("Please type the password in again")
+        password2 = getpass.getpass('Password:')
+        if password == password2:
+            encoded = encode(key, password)
+            store_pwd(encoded)
+        else:
+            print("ERROR: passwords don't match")
+            exit(1)
     
     elif args["get"]:
         print("Get Encoded Password:")
