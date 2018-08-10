@@ -25,6 +25,11 @@ yum install zlib-devel bzip2-devel sqlite sqlite-devel openssl-devel
 ```
 
 Ubuntu:  
+```
+apt-get install libbz2-dev sqlite libssl-dev
+apt-get install libsqlite3-dev
+apt-get install zip unzip
+```
 
 #### Configure and Compile as "ALTINSTALL" 
 ```
@@ -72,11 +77,26 @@ as `root`:
 useradd botuser
 ```
 
+Setup a home directory for this UNIX user
+
+```
+mkdir /home/botuser
+chown botuser:botuser /home/botuser
+
+```
+
 ## 6. Install GIT ##
 as `root`:
 ```
 yum install git
 ```
+
+Ubuntu:
+
+```
+apt-get install git
+```
+
 
 ## 7. Install Java 8 
 as `root`:
@@ -171,10 +191,9 @@ $ chmod 400 .key
 When the `.key` file is in place, initialise password access to the remote MySQL database using 
 ```
 cd ~/NLPBot
-python3.5 pwdutil.py -s TheBotDatabasePassword
+python3.5 pwdutil.py -s 
 ```
-
-where "password" is the appropriate real password for the ChatBot MySQL database user account (so this is not the key phrase set above).
+and then follow the prompts to stored a password.  This has to match the password for the ChatBot MySQL database user account `nlpbot` (so this is not the key phrase set above).
 
 NOTE - the approach taken here is not very secure.  It is better than storing the database password in clear text, but is still very limited and this configuration is not suitable for sensitive data.  
 
@@ -285,7 +304,14 @@ True
 [nltk_data]     /home/botuser/nltk_data...
 [nltk_data]   Unzipping corpora/stopwords.zip.
 ```
+** Common Issue **
+If you get the error
+```
+ImportError: No module named '_sqlite3'
+```
+when importing NLTK, it means sqlite and sqllite dev libraries weren't in place when you installed Python 3.5.  
 
+To fix this, install the missing UNIX libraries and then re-run the Python 3.4 `configure` and `make altinstall` steps.
 
 #### Validate Database Connectivity
 
